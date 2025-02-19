@@ -247,9 +247,18 @@ function updateCartTotal(total, shipping) {
   totalPriceElemnt.innerHTML = `
   <p class=" m-2 fs-5">order-summary</p>
    <hr class="m-0">
-   <p mx-2>Subtotal: $${total.toFixed(2)}</p>
-    <p>Shipping Fee: $${shipping.toFixed(2)}</p>
-    <p>Total: $${grandTotal.toFixed(2)}</p>
+   <div class="cart-total">
+   <span class = "">Subtotal:</span> 
+    <span class="">$${total.toFixed(2)}</span>
+    </div>
+     <div>
+   <span class="m">Shipping Fee:</span> 
+    <span> $${shipping.toFixed(2)}</span>
+    </div> <div>
+   <span mx-2>Total:</span> 
+    <span>$${grandTotal.toFixed(2)}</span>
+    </div>
+      
   `;
 
 }
