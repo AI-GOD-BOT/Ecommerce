@@ -218,3 +218,25 @@ main {
     border: 1px solid rgb(194, 191, 191);
     border-radius: 5px;
 }
+
+.cart-total-span {
+    margin-left: 10rem;
+    padding: auto;
+
+}
+
+.cart-total-span2 {
+    margin-left: 9rem;
+    padding: auto;
+
+}
+
+.cart-total-span3 {
+    margin-left: 178px;
+    padding: auto;
+
+}
+
+.cart-total {
+    margin: 30px;
+}

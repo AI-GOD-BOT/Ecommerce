@@ -149,13 +149,17 @@ if (window.location.pathname.includes("cart.html")) {
       <p class = 'text-center  m-2 fs-1 Continue'><a class="con " href="./product.html" >continue shopping!</a></p>
       
       `;
+      let totalPriceSection = document.querySelector(".cart-price1");
+      if (totalPriceSection) {
+        totalPriceSection.remove()
+      }
       return;
     }
 
 
     cartpro.innerHTML = "";
     let totalSum = 0;
-    const shippingFee = 30;
+    let shippingFee = 30;
 
     cart.forEach((product, index) => {
       let cartItem = document.createElement("figure");
@@ -208,7 +212,7 @@ if (window.location.pathname.includes("cart.html")) {
         }
         localStorage.setItem("cart", JSON.stringify(cart));
         displayCart();
-
+        updateCartCount()
       });
     });
 
@@ -235,28 +239,38 @@ function updateCartCount() {
 
 updateCartCount();
 
+
 function updateCartTotal(total, shipping) {
+
+  // if (total === 0) {
+
+  //   let totalPriceSection = document.querySelector(".cart-price1");
+  //   if (totalPriceSection) {
+  //     totalPriceSection.remove();
+  //   }
+  //   return;
+  // }
   let totalPriceElemnt = document.querySelector(".cart-price1")
   if (!totalPriceElemnt) {
     totalPriceElemnt = document.createElement("div")
     totalPriceElemnt.className = "cart-price1"
     document.querySelector(".order-summary").appendChild(totalPriceElemnt)
-
   }
   let grandTotal = total + shipping;
   totalPriceElemnt.innerHTML = `
-  <p class=" m-2 fs-5">order-summary</p>
+  <p class=" m-2 ms-4 fs-5">order-summary</p>
    <hr class="m-0">
    <div class="cart-total">
    <span class = "">Subtotal:</span> 
-    <span class="">$${total.toFixed(2)}</span>
+    <span class="cart-total-span">$${Math.round(total)}</span>
     </div>
-     <div>
+     <div class="cart-total">
    <span class="m">Shipping Fee:</span> 
-    <span> $${shipping.toFixed(2)}</span>
-    </div> <div>
-   <span mx-2>Total:</span> 
-    <span>$${grandTotal.toFixed(2)}</span>
+    <span class="cart-total-span2"> $${shipping}</span>
+    </div>
+     <div class="cart-total">
+   <span class = "fw-bold">Total:</span> 
+    <span class="cart-total-span3 fw-bold">$${Math.round(grandTotal)}</span>
     </div>
       
   `;
