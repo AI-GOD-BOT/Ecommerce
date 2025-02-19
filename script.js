@@ -154,9 +154,13 @@ if (window.location.pathname.includes("cart.html")) {
 
 
     cartpro.innerHTML = "";
+    let totalSum = 0;
+    const shippingFee = 30;
 
     cart.forEach((product, index) => {
       let cartItem = document.createElement("figure");
+      let productTotal = product.quantity * product.price;
+      totalSum += productTotal;
 
       cartItem.innerHTML = `
        
@@ -170,14 +174,14 @@ if (window.location.pathname.includes("cart.html")) {
         </span>
         <span><button class="remove m-3 p-1 px-3 text-align" data-index="${index}"><ion-icon name="trash-sharp"></ion-icon></button></span>
         </div>
-        <div class = "cart-product-price"> ${product.quantity} x ${product.quantity * product.price}</div>
+        <div class = "cart-product-price"> ${product.quantity} x $${product.quantity * (product.price).toFixed(2)}</div>
         <hr id="cart-item-hr"/>
       `;
 
       cartpro.appendChild(cartItem);
 
     });
-
+    updateCartTotal(totalSum, shippingFee);
     setupCartActions();
 
   }
@@ -230,4 +234,23 @@ function updateCartCount() {
 }
 
 updateCartCount();
+
+function updateCartTotal(total, shipping) {
+  let totalPriceElemnt = document.querySelector(".cart-price1")
+  if (!totalPriceElemnt) {
+    totalPriceElemnt = document.createElement("div")
+    totalPriceElemnt.className = "cart-price1"
+    document.querySelector(".order-summary").appendChild(totalPriceElemnt)
+
+  }
+  let grandTotal = total + shipping;
+  totalPriceElemnt.innerHTML = `
+  <p class=" m-2 fs-5">order-summary</p>
+   <hr class="m-0">
+   <p mx-2>Subtotal: $${total.toFixed(2)}</p>
+    <p>Shipping Fee: $${shipping.toFixed(2)}</p>
+    <p>Total: $${grandTotal.toFixed(2)}</p>
+  `;
+
+}
 
