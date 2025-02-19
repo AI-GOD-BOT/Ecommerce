@@ -92,6 +92,7 @@ if (window.location.pathname.includes("productDetailsPage.html")) {
       document.getElementById("productImage").src = product.image;
       document.getElementById("productDescription").textContent = product.description;
       document.getElementById("productPrice").textContent = `$${product.price}`;
+      updateCartCount()
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
