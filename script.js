@@ -1,16 +1,14 @@
 let productsDiv = document.querySelector(".products")
 let buttons = document.querySelectorAll(".button2")
 let opt = document.querySelector(".options")
+// let cartbtn = document.querySelectorAll(". addtocart")
 let countbtn = document.getElementById("countDisplay")
-// let womenClothing = document.querySelectorAll(".button2")[2]
-// let jewelery = document.querySelectorAll(".button2")[3]
-// let elctronic = document.querySelectorAll(".button2")[4]
 
 
-let productdata = []
-let cartitem = new Set()
-let count = 0
-console.log(productdata);
+// let productdata = []
+// let cartitem = []
+// let count = 0
+// console.log(productdata);
 
 
 async function fetchData() {
@@ -21,14 +19,15 @@ async function fetchData() {
     console.log(Data);
     productdata = Data
     displayData(productdata);
+
+
   } catch (error) {
     console.log("Error fetching data:", error);
 
   }
-
-
 }
 fetchData()
+
 
 function displayData(data) {
   let value = ""
@@ -48,7 +47,7 @@ function displayData(data) {
            <p class= "m-0"> $ ${da.price}<p>
            <hr class= "m-0">
           <div class="card-body">
-            <a href="#" class="btn btn-primary addtocart " data-id="${da.id}" >Add to cart</a>
+            <a href="" class="btn btn-primary addtocart " data-id="${da.id}" >Add to cart</a>
              <a href="./productDetailsPage.html?id=${da.id}" class="btn btn-primary Details " data-id="${da.id}" >Details</a>
           </div>
         </div>
@@ -57,34 +56,13 @@ function displayData(data) {
 
   })
   productsDiv.innerHTML = value;
-  // attachCartListeners();
-  // let detailsButtons = document.querySelectorAll(".Details");
-  // detailsButtons.forEach(buttons => {
-  //   buttons.addEventListener("click", (e) => {
-  //     e.preventDefault();
-  //     let productId = e.target.getAttribute("data-id");
-  //     console.log(productId);
-
-
-  //   })
-  // })
-
+  setupCartButtons();
 }
-function attachCartListeners() {
-  let cartButtons = document.querySelectorAll(".addtocart");
-  cartcount.forEach(button => {
-    button.addEventListener("click", (event) => {
-      event.preventDefault()
-      let productid = button.getAttribute("data-product-id");
-      if (!cartitem.has(productid)) {
-        cartitem.add(productid);
-        count++
-        countbtn.textContent = count
-        console.log(count);
-      }
-    })
-  });
-}
+
+
+
+
+/// products filtered by category ///
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     let category = button.getAttribute("data-category");
@@ -98,6 +76,8 @@ buttons.forEach((button) => {
     }
   });
 });
+
+//////   product details page     //////
 if (window.location.pathname.includes("productDetailsPage.html")) {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get("id");
@@ -116,48 +96,138 @@ if (window.location.pathname.includes("productDetailsPage.html")) {
       console.error("Error fetching product details:", error);
     }
   }
-
   fetchProductDetails();
-
-
 }
-let slider = document.querySelector(".silder-loop");
+function setupCartButtons() {
+  let cartButtons = document.querySelectorAll(".addtocart");
 
-async function fetchAll(category) {
-  try {
-    const response = await fetch("https://fakestoreapi.com/products");
-    const products = await response.json();
+  cartButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      let productId = button.getAttribute("data-id");
+      let product = productdata.find((prod) => prod.id == productId);
 
-    const filteredProducts = products.filter(prod => prod.category === category).slice(0, 5);
-    slideShow(filteredProducts);
-  } catch (error) {
-    console.error("Error fetching products for slider:", error);
+      if (!product) {
+        console.error("Product not found!");
+        return;
+      }
+
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+      let existingItem = cart.find(item => item.id == productId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        product.quantity = 1;
+        cart.push(product);
+      }
+
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+
+    });
+  });
+}
+
+if (window.location.pathname.includes("cart.html")) {
+  function displayCart() {
+    let cartpro = document.querySelector(".product-list");
+
+    if (!cartpro) {
+      console.error("Error: .product-list not found in DOM");
+      return;
+    }
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (cart.length === 0) {
+      cartpro.innerHTML = `
+      <p class = 'text-center fs-5 empty'>Your cart is empty!</p>
+      <p class = 'text-center  m-2 fs-1 Continue'><a class="con " href="./product.html" >continue shopping!</a></p>
+      
+      `;
+      return;
+    }
+
+
+    cartpro.innerHTML = "";
+
+    cart.forEach((product, index) => {
+      let cartItem = document.createElement("figure");
+
+      cartItem.innerHTML = `
+       
+        <div class="cart-figure">
+        <img class="fluid m-4" src="${product.image}" alt="pro img" width="90">
+       <span class = "cart-item-details fw-normal"> ${product.title}</span>
+        <span class = " cart-item-math m-3  ">
+        <button class="decrease text-align p-1 px-3 pb-2" data-index="${index}">-</button>
+        <span class="quantity px-2">${product.quantity}</span>
+        <button class="increase text-align p-1  pb-2 px-3" data-index="${index}">+</button>
+        </span>
+        <span><button class="remove m-3 p-1 px-3 text-align" data-index="${index}"><ion-icon name="trash-sharp"></ion-icon></button></span>
+        </div>
+        <div class = "cart-product-price"> ${product.quantity} x ${product.quantity * product.price}</div>
+        <hr id="cart-item-hr"/>
+      `;
+
+      cartpro.appendChild(cartItem);
+
+    });
+
+    setupCartActions();
+
   }
 
+  function setupCartActions() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    document.querySelectorAll(".increase").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        let index = e.target.getAttribute("data-index");
+        cart[index].quantity += 1;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+      });
+    });
+
+    document.querySelectorAll(".decrease").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        let index = e.target.getAttribute("data-index");
+        if (cart[index].quantity > 1) {
+          cart[index].quantity -= 1;
+        } else {
+          cart.splice(index, 1);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+
+      });
+    });
+
+    document.querySelectorAll(".remove").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        let index = e.target.getAttribute("data-index");
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+        updateCartCount()
+
+      });
+    });
+  }
+
+  displayCart();
 }
 
-function slideShow(products) {
-
-  slider.innerHTML = "";
-  products.forEach((product) => {
-    let slide = document.createElement("img");
-    slide.src = product.image;
-    slide.alt = product.title;
-    slide.classList.add("slide")
-
-    slider.appendChild(slide);
-  });
-  startAutoSlide();
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let count = cart.length;
+  countbtn.textContent = count;
 }
-let index = 0;
-function startAutoSlide() {
-  let slides = document.querySelectorAll(".slide");
 
-  if (slides.length === 0) return;
+updateCartCount();
 
-  setInterval(() => {
-    slides.forEach((slide) => (slide.style.display = "none")); // Hide all
-    slides[index].style.display = "block"; // Show current image
-    index = (index + 1) % slides.length; // Move to next image
-  }, 3000);
-}
