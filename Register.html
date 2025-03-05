@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>signup page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 100px;
+            /* background-color: black; */
+        }
+
+        form {
+            /* background: black; */
+            padding: 30px;
+            /* color: aliceblue; */
+        }
+
+        input {
+            padding: 10px;
+            margin: 0px;
+            width: 50%;
+            padding-right: 129px;
+            border-radius: 4px;
+        }
+
+        .submit {
+            padding-left: 126px;
+            width: 97%;
+            background: #e10303;
+        }
+
+        .button1 {
+            margin-top: 10px;
+        }
+
+        .button2 {
+            padding: 7px 23px;
+            background: #1877f2;
+        }
+
+        .button3 {
+            padding: 7px 23px;
+            background: #db4437;
+        }
+
+        .button4 {
+            padding: 7px 23px;
+            background: #1da1f2;
+        }
+
+        h2,
+        p {
+            opacity: 0.85;
+        }
+
+        span {
+            position: relative;
+            bottom: 19px;
+            left: 103px;
+            background-color: black;
+            padding: 0px 5px;
+        }
+
+        hr {
+            margin-top: 34px;
+            margin-right: 10px;
+        }
+
+        span {
+            color: aliceblue;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" autocomplete="on">
+        <h2>Signup</h2>
+        <p>Already have an account? <b>Login</b></p>
+        <input type="text" name="username" title="username" placeholder="username" /><br /><br />
+        <input type="email" name="email" title="email" placeholder="Email" /><br /><br />
+        <input type="password" name="password" title="password" placeholder="password" /><br /><br />
+        <input type="password" name="confirim password" title="confirim password"
+            placeholder="confirim password" /><br /><br />
+        <input class="submit" type="submit" name="submit" title="submit" value="Signup" />
+
+        <hr />
+        <span>or Login with</span>
+
+        <div class="button1">
+            <button class="button2">Facebook</button>
+            <button class="button3">Google</button>
+            <button class="button4">Twitter</button>
+        </div>
+    </form>
+</body>
+
+</html>
