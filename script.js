@@ -99,6 +99,7 @@ if (window.location.pathname.includes("productDetailsPage.html")) {
   }
   fetchProductDetails();
 }
+//cart page
 function setupCartButtons() {
   let cartButtons = document.querySelectorAll(".addtocart");
 
