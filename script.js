@@ -278,3 +278,5 @@ function updateCartTotal(total, shipping) {
 
 }
 
+
+

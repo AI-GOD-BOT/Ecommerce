@@ -240,3 +240,19 @@ main {
 .cart-total {
     margin: 30px;
 }
+
+/* login page */
+
+.form-div {
+    display: flex;
+    justify-content: center;
+
+}
+
+.input-1 {
+    padding-right: 3rem;
+}
+
+.input-2 {
+    align-self: center;
+}
